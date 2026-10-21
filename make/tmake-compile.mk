@@ -21,12 +21,12 @@ $(BUILDDIR)/%.c.so : %.c
 	@echo "CC $<"
 	$(Q)$(CC) $(CFLAGS) $(TMAKE_CFLAGS) -fpic -D__SHARED__=1 -o "$@" -c $<
 
-$(BUILDDIR)/%.c.o : %.cxx
+$(BUILDDIR)/%.cxx.o : %.cxx
 	@mkdir -p "$(@D)"
 	@echo "CXX $<"
 	$(Q)$(CXX) $(CXXFLAGS) $(TMAKE_CFLAGS) -o "$@" -c $<
 
-$(BUILDDIR)/%.c.so : %.cxx
+$(BUILDDIR)/%.cxx.so : %.cxx
 	@mkdir -p "$(@D)"
 	@echo "CXX $<"
 	$(Q)$(CXX) $(CXXFLAGS) $(TMAKE_CFLAGS) -fpic -D__SHARED__=1 -o "$@" -c $<
