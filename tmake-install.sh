@@ -1,10 +1,19 @@
 #!/bin/sh
 
-install_file () {
+TMAKE_VERSION="0.1.0"
+
+tmake_install_file () {
 	if grep -r "include \$(TMAKE_DIR)/$1" > /dev/null; then
 		echo "installing $1 ..."
-		cp "$TMAKE_SRC/$1" "make/"
+		cat "$PROLOGUE" "$TMAKE_SRC/$1" >> "make/$1"
 	fi
+}
+
+tmake_generate_prologue () {
+	PROLOGUE="${TMPDIR:="/tmp"}/$$.prologue"
+	echo "# this file comes from tmake $TMAKE_VERSION
+# see https://github.com/stanix-org/tmake for latest version
+" > "$PROLOGUE"
 }
 
 THIS="$(realpath "$0")"
@@ -16,6 +25,7 @@ if test -n "$1" ; then
 	cd "$1" || exit 1
 fi
 
+tmake_generate_prologue
 
 # reset tmake dir
 mkdir -p "make"
@@ -34,5 +44,7 @@ for FILE in \
 	"tmake-subdir.mk" \
 	"tmake-compile.mk" \
 ; do
-	install_file "$FILE"
+	tmake_install_file "$FILE"
 done
+
+rm "$PROLOGUE"
